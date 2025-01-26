@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Kod Oluşturucu</title>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,24 +13,26 @@
         }
         #qrcode {
             margin: 20px auto;
+            width: 200px;
+            height: 200px;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
             margin: 10px;
             cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
+            background-color: #f7dc6f; /* Açık sarı */
+            color: black;
             border: none;
             border-radius: 5px;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #f9e79f;
         }
     </style>
 </head>
 <body>
-    <button onclick="generateQRCode()">QR Kod Oluştur</button>
+    <button onclick="generateQRCode()"></button>
     <div id="qrcode"></div>
     <p id="countdown"></p>
 
@@ -39,7 +41,7 @@
 
         function generateQRCode() {
             // Kullanıcı ID'sini ve Unix zaman damgasını oluştur
-            const userId = "GP4057779"; // Sabit kullanıcı ID'si
+            const userId = "GP4057779"; // Aras'ın kullanıcı ID'si
             const timestamp = Math.floor(Date.now() / 1000); // Unix timestamp
             const qrContent = `${userId};${timestamp}`; // QR kod içeriği
 
@@ -47,11 +49,14 @@
             const qrCodeDiv = document.getElementById('qrcode');
             qrCodeDiv.innerHTML = "";
 
-            // QR kod oluştur
-            QRCode.toCanvas(qrCodeDiv, qrContent, { width: 200 }, function (error) {
-                if (error) console.error(error);
-                console.log("QR Kod oluşturuldu: " + qrContent);
+            // QR kodu oluştur
+            const qrCode = new QRCode(qrCodeDiv, {
+                text: qrContent,
+                width: 200,
+                height: 200,
             });
+
+            console.log("QR Kod oluşturuldu: " + qrContent);
 
             // Geri sayım ve geçerlilik süresi
             startCountdown(10);
