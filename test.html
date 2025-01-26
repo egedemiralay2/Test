@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Kod Oluşturucu</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #qrcode {
+            margin: 20px auto;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>10 Saniye Geçerli QR Kod Oluşturucu</h1>
+    <button onclick="generateQRCode()">QR Kod Oluştur</button>
+    <div id="qrcode"></div>
+    <p id="countdown"></p>
+
+    <script>
+        let timer;
+
+        function generateQRCode() {
+            // Kullanıcı ID'sini ve Unix zaman damgasını oluştur
+            const userId = "GP3087987"; // Sabit kullanıcı ID'si
+            const timestamp = Math.floor(Date.now() / 1000); // Unix timestamp
+            const qrContent = `${userId};${timestamp}`; // QR kod içeriği
+
+            // QR kod alanını temizle
+            const qrCodeDiv = document.getElementById('qrcode');
+            qrCodeDiv.innerHTML = "";
+
+            // QR kod oluştur
+            QRCode.toCanvas(qrCodeDiv, qrContent, { width: 200 }, function (error) {
+                if (error) console.error(error);
+                console.log("QR Kod oluşturuldu: " + qrContent);
+            });
+
+            // Geri sayım ve geçerlilik süresi
+            startCountdown(10);
+        }
+
+        function startCountdown(seconds) {
+            clearInterval(timer); // Daha önceki sayaç varsa durdur
+            const countdownEl = document.getElementById('countdown');
+            let timeLeft = seconds;
+
+            timer = setInterval(() => {
+                countdownEl.textContent = `Bu kod ${timeLeft} saniye geçerli.`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    countdownEl.textContent = "Kodun geçerlilik süresi doldu. Yeni bir kod oluşturun.";
+                    document.getElementById('qrcode').innerHTML = ""; // QR kodu temizle
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
